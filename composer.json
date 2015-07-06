@@ -16,8 +16,10 @@
             "name": "Closca Costel",
             "email": "closca.costel@gmail.com"
         },
+        {
             "name": "Dan Dunford",
-            "email": "me@dandunford.info",
+            "email": "me@dandunford.info"
+        }
     ],
     "minimum-stability": "dev",
     "require": {
