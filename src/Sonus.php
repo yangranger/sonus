@@ -287,6 +287,22 @@ class Sonus
     }
 
     /**
+     * Retrieves one video thumbnail at a defined position
+     * @param  string  $input  video input
+     * @param  string  $output output filename
+     * @param  integer $secondPosition  time position of the thumbnail to generate in second
+     * @return boolean
+     */
+    public static function getOneThumbnail($input, $output,  $secondPosition = 5)
+    {
+        // Execute thumbnail generator command
+        $command = self::getConverterPath().' -i '.$input.' -ss '.gmdate("H:i:s", $secondPosition).'.000 -vframes 1 '.$output;
+        echo $command;
+        return shell_exec($command);
+        //return true;
+    }
+    
+    /**
      * Retrieves video thumbnails 
      * @param  string  $input  video input
      * @param  string  $output output filename
