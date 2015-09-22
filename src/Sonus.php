@@ -232,30 +232,48 @@ class Sonus
         {
             $input = substr($input, 3);
         }
+        
+        if(0){ //todo test version avconv/ffmpeg
+            switch ($type) 
+            {
+                case 'json':
+                    $command = self::getProbePath().' -v quiet -print_format json -show_format -show_streams -pretty -i '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    $output  = json_decode($output, true);
+                    break;
 
-        switch ($type) 
+                case 'xml':
+                    $command = self::getProbePath().' -v quiet -print_format xml -show_format -show_streams -pretty -i '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    break;
+
+                case 'csv':
+                    $command = self::getProbePath().' -v quiet -print_format csv -show_format -show_streams -pretty -i '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    break;
+
+                default:
+                    $command = self::getProbePath().' -v quiet -print_format json -show_format -show_streams -pretty -i '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    $output  = json_decode($output, true);
+                    break;
+            }
+        }else //compatible with avconv 9.x
         {
-            case 'json':
-                $command = self::getProbePath().' -v quiet -print_format json -show_format -show_streams -pretty -i '.$input.' 2>&1';
-                $output  = shell_exec($command);
-                $output  = json_decode($output, true);
-                break;
-
-            case 'xml':
-                $command = self::getProbePath().' -v quiet -print_format xml -show_format -show_streams -pretty -i '.$input.' 2>&1';
-                $output  = shell_exec($command);
-                break;
-
-            case 'csv':
-                $command = self::getProbePath().' -v quiet -print_format csv -show_format -show_streams -pretty -i '.$input.' 2>&1';
-                $output  = shell_exec($command);
-                break;
-            
-            default:
-                $command = self::getProbePath().' -v quiet -print_format json -show_format -show_streams -pretty -i '.$input.' 2>&1';
-                $output  = shell_exec($command);
-                $output  = json_decode($output, true);
-                break;
+            switch ($type) 
+            {
+                case 'ini':
+                    $command = self::getProbePath().' -v quiet -of ini -show_format -show_streams -pretty  '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    break;
+                
+                case 'json':
+                default:
+                    $command = self::getProbePath().' -v quiet -of json -show_format -show_streams -pretty  '.$input.' 2>&1';
+                    $output  = shell_exec($command);
+                    $output  = json_decode($output, true);
+                    break;
+            }
         }
 
         return $output;
