@@ -278,7 +278,43 @@ class Sonus
 
         return $output;
     }
-
+    
+    /**
+     * Retrieves video duration
+     * @param  string  $input  video input
+     * @return int
+     */
+    public static function getDuration($input)
+    {
+        //get all infos
+        $mediaInfo=self::getMediaInfo($input);
+        
+        //get duration in string
+        $time=$mediaInfo['format']['duration'];
+        
+        //split hh:mm:ss  and ms
+        $split_time = explode('.',$time);
+        $stringUnderSecond=$split_time[1];
+        $stringSecond = $split_time[0];
+        
+        //change from hh:mm:ss to ssss
+        $split_time = explode(':', $stringSecond);
+        $modifier = pow(60, count($split_time) - 1);
+        $seconds = 0;
+        foreach($split_time as $time_part){
+            $seconds += ($time_part * $modifier);
+            $modifier /= 60;
+        }
+        
+        //rounded to the second
+        if ((int)substr($stringUnderSecond,0,1) >=5 )
+        {
+            $seconds+=1;
+        }
+        
+        return $seconds;
+    }
+    
     /**
      * Retrieves video thumbnails
      * @param  string  $input  video input
