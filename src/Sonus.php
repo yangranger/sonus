@@ -351,7 +351,6 @@ class Sonus
     {
         // Execute thumbnail generator command
         $command = self::getConverterPath().' -i '.$input.' -ss '.gmdate("H:i:s", $secondPosition).'.000 -vframes 1 '.$output;
-        echo $command;
         return shell_exec($command);
         //return true;
     }
@@ -382,8 +381,27 @@ class Sonus
         shell_exec($command);
         return true;
     }
-
-
+    
+    /**
+     * Retrieves video duration
+     * @param  string  $input  video input
+     * @param  string  $output  video output
+     * @return boolean
+     */
+    public static function moveMetadata($input,$output='')
+    {
+        if(substr($input,-4)==".mp4")
+        {
+            //ffmpeg -i input.mp4 -codec copy -map 0 -movflags +faststart output.mp4
+            $output = $output=='' ? str_replace('.mp4','_tmp.mp4',$input) : $output;
+            $command = self::getConverterPath().' -i '.$input.' -y -codec copy -map 0 -movflags +faststart '.$output.' 2>&1';   
+            shell_exec($command);
+            return true;
+        }
+        
+        return false; 
+    }
+            
     /**
      * Input files
      * @var array
