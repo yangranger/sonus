@@ -271,6 +271,11 @@ class Sonus
                 default:
                     $command = self::getProbePath().' -v quiet -of json -show_format -show_streams -pretty  '.$input.' 2>&1';
                     $output  = shell_exec($command);
+                    
+                    //get only the json and remove the output errors
+                    $output = substr($output,strpos($output,'{'));
+                    $output= substr($output,0,strripos ($output,'}')+1);
+                    
                     $output  = json_decode($output, true);
                     break;
             }
